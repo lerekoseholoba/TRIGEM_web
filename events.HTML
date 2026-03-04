@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRIGEM Institute of Excellence | Events</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#1B2A41',
+                        nude: '#EADBC8',
+                        nudeDark: '#D9C5B2',
+                        turquoise: '#38A3A5',
+                        lightGrey: '#FBFBFB',
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Cormorant Garamond', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #38A3A5;
+            transition: width .3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        .page-hero {
+            background: linear-gradient(rgba(27, 42, 65, 0.75), rgba(27, 42, 65, 0.75)),
+                        url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up   { animation: fadeUp 0.8s ease forwards; }
+        .fade-up-1 { animation: fadeUp 0.8s ease 0.1s forwards; opacity: 0; }
+        .fade-up-2 { animation: fadeUp 0.8s ease 0.25s forwards; opacity: 0; }
+        .fade-up-3 { animation: fadeUp 0.8s ease 0.4s forwards; opacity: 0; }
+
+        /* Photo card hover */
+        .photo-card {
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+        .photo-card img {
+            transition: transform 0.45s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .photo-card:hover img {
+            transform: scale(1.06);
+        }
+        .photo-card .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(27,42,65,0);
+            transition: background 0.35s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .photo-card:hover .overlay {
+            background: rgba(27,42,65,0.35);
+        }
+        .photo-card .overlay span {
+            color: white;
+            font-size: 28px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .photo-card:hover .overlay span {
+            opacity: 1;
+        }
+
+        /* Lightbox */
+        #lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10,18,30,0.92);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+        #lightbox.active { display: flex; }
+        #lightbox img {
+            max-width: 90vw;
+            max-height: 85vh;
+            object-fit: contain;
+            border: 2px solid rgba(56,163,165,0.3);
+        }
+
+        /* Upcoming empty state */
+        .upcoming-empty {
+            background: linear-gradient(135deg, #1B2A41 0%, #243752 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .upcoming-empty::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(56,163,165,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Placeholder photo box */
+        .photo-placeholder {
+            background: #e8ddd0;
+            border: 2px dashed #D9C5B2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #a89880;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body class="bg-lightGrey text-navy font-sans">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-nude text-navy shadow-md">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 py-2 flex justify-between items-center">
+            <div class="flex flex-col items-start" style="gap:0; line-height:1;">
+                <img src="images/TRIGEM_logo.png" alt="TRIGEM Institute of Excellence" class="h-44" style="margin-bottom:-18px; display:block;">
+                <p class="text-[13px] italic tracking-[0.18em] text-navy/60 font-light ml-1" style="font-family:'Georgia',serif; margin:0; padding:0;">
+                    Dare to Dream &nbsp;·&nbsp; Dare to Learn &nbsp;·&nbsp; Dare to Earn
+                </p>
+            </div>
+            <div class="hidden md:flex flex-col items-center self-stretch py-3 mx-4">
+                <div class="w-px flex-1 bg-gradient-to-b from-transparent via-navy/25 to-transparent"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-turquoise my-2"></div>
+                <div class="w-px flex-1 bg-gradient-to-b from-transparent via-navy/25 to-transparent"></div>
+            </div>
+            <ul class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest items-center">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="subjects.html" class="nav-link">Subjects</a></li>
+                <li><a href="events.html" class="nav-link">Events</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+                <li><a href="https://lerekoseholoba.github.io/TRIGEM/" target="_blank" class="bg-navy text-white px-6 py-2 rounded shadow-lg hover:bg-turquoise transition-colors duration-300">Register</a></li>
+            </ul>
+            <button class="md:hidden text-2xl text-navy">☰</button>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <header class="page-hero h-[40vh] flex items-center justify-center text-center text-white px-6">
+        <div class="fade-up">
+            <p class="text-turquoise uppercase tracking-[0.4em] font-bold text-xs mb-3">Our Community</p>
+            <h1 class="text-4xl md:text-6xl font-bold leading-tight">Events &amp; <span class="text-turquoise">Highlights</span></h1>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════
+         PAST EVENTS
+    ════════════════════════════════════════ -->
+    <section class="max-w-6xl mx-auto px-6 pt-24 pb-12">
+
+        <!-- Section label -->
+        <div class="flex items-center gap-4 mb-14 fade-up-1">
+            <div class="h-px flex-1 bg-nude"></div>
+            <span class="text-[10px] uppercase tracking-[0.35em] font-bold text-turquoise whitespace-nowrap">Past Events</span>
+            <div class="h-px flex-1 bg-nude"></div>
+        </div>
+
+        <!-- Event: 2025 Career Expo -->
+        <div class="fade-up-1">
+
+            <!-- Event header card -->
+            <div class="bg-white border border-nude shadow-lg rounded-sm overflow-hidden mb-8">
+                <div class="bg-nude px-8 py-5 flex items-center gap-4 border-b border-nudeDark">
+                    <div class="w-1 h-8 bg-turquoise rounded-full"></div>
+                    <div class="flex-1">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-1">
+                            <h2 class="font-bold text-lg tracking-tight">2025 Career Expo</h2>
+                            <span class="text-[10px] uppercase tracking-widest font-bold text-turquoise bg-turquoise/10 px-3 py-1 rounded-full self-start md:self-auto">2025</span>
+                        </div>
+                        <p class="text-[11px] text-navy/50 uppercase tracking-widest mt-0.5">Bensonvale College</p>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="px-8 py-8">
+                    <p class="font-serif italic text-navy/70 text-lg leading-relaxed mb-0" style="font-family:'Cormorant Garamond',serif;">
+                        TRIGEM Institute hosted a Career Expo at Bensonvale College, bringing together a distinguished lineup of professionals from various fields who came to inspire and motivate our learners. The event opened its doors to students from a wide range of schools across the region, creating a vibrant space for young minds to explore career possibilities, ask questions, and envision their futures with confidence.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Photo Gallery Grid -->
+            <div class="mb-4">
+                <p class="text-[10px] uppercase tracking-[0.3em] font-bold text-navy/40 mb-5">Event Gallery</p>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+                    <!-- Photo 1 — tall featured -->
+                    <div class="photo-card rounded-sm shadow-md row-span-2 h-80 md:h-auto" style="min-height:320px;"
+                         onclick="openLightbox('images/events/career-expo-1.jpg')">
+                        <img src="images/events/career-expo-1.jpg"
+                             onerror="this.parentElement.classList.add('photo-placeholder'); this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;flex-direction:column;align-items:center;gap:8px;color:#a89880;\'><span style=\'font-size:32px;\'>📷</span><span style=\'font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;\'>Photo 1</span><span style=\'font-size:9px;opacity:0.6;\'>Add image to images/events/</span></div>'"
+                             alt="Career Expo Photo 1">
+                        <div class="overlay"><span>🔍</span></div>
+                    </div>
+
+                    <!-- Photo 2 -->
+                    <div class="photo-card rounded-sm shadow-md h-40"
+                         onclick="openLightbox('images/events/career-expo-2.jpg')">
+                        <img src="images/events/career-expo-2.jpg"
+                             onerror="this.parentElement.classList.add('photo-placeholder'); this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;flex-direction:column;align-items:center;gap:8px;color:#a89880;height:100%;justify-content:center;\'><span style=\'font-size:28px;\'>📷</span><span style=\'font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;\'>Photo 2</span></div>'"
+                             alt="Career Expo Photo 2">
+                        <div class="overlay"><span>🔍</span></div>
+                    </div>
+
+                    <!-- Photo 3 -->
+                    <div class="photo-card rounded-sm shadow-md h-40"
+                         onclick="openLightbox('images/events/career-expo-3.jpg')">
+                        <img src="images/events/career-expo-3.jpg"
+                             onerror="this.parentElement.classList.add('photo-placeholder'); this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;flex-direction:column;align-items:center;gap:8px;color:#a89880;height:100%;justify-content:center;\'><span style=\'font-size:28px;\'>📷</span><span style=\'font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;\'>Photo 3</span></div>'"
+                             alt="Career Expo Photo 3">
+                        <div class="overlay"><span>🔍</span></div>
+                    </div>
+
+                    <!-- Photo 4 -->
+                    <div class="photo-card rounded-sm shadow-md h-40"
+                         onclick="openLightbox('images/events/career-expo-4.jpg')">
+                        <img src="images/events/career-expo-4.jpg"
+                             onerror="this.parentElement.classList.add('photo-placeholder'); this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;flex-direction:column;align-items:center;gap:8px;color:#a89880;height:100%;justify-content:center;\'><span style=\'font-size:28px;\'>📷</span><span style=\'font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;\'>Photo 4</span></div>'"
+                             alt="Career Expo Photo 4">
+                        <div class="overlay"><span>🔍</span></div>
+                    </div>
+
+                    <!-- Photo 5 -->
+                    <div class="photo-card rounded-sm shadow-md h-40"
+                         onclick="openLightbox('images/events/career-expo-5.jpg')">
+                        <img src="images/events/career-expo-5.jpg"
+                             onerror="this.parentElement.classList.add('photo-placeholder'); this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;flex-direction:column;align-items:center;gap:8px;color:#a89880;height:100%;justify-content:center;\'><span style=\'font-size:28px;\'>📷</span><span style=\'font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;\'>Photo 5</span></div>'"
+                             alt="Career Expo Photo 5">
+                        <div class="overlay"><span>🔍</span></div>
+                    </div>
+
+                </div>
+
+                <!-- Helper note -->
+                <p class="text-[10px] text-navy/30 italic mt-4 tracking-wide">
+                    To display photos, add your images to <span class="font-bold not-italic">images/events/</span> named <span class="font-bold not-italic">career-expo-1.jpg</span> through <span class="font-bold not-italic">career-expo-5.jpg</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         UPCOMING EVENTS
+    ════════════════════════════════════════ -->
+    <section class="max-w-6xl mx-auto px-6 pt-12 pb-24">
+
+        <div class="flex items-center gap-4 mb-14 fade-up-2">
+            <div class="h-px flex-1 bg-nude"></div>
+            <span class="text-[10px] uppercase tracking-[0.35em] font-bold text-turquoise whitespace-nowrap">Upcoming Events</span>
+            <div class="h-px flex-1 bg-nude"></div>
+        </div>
+
+        <div class="upcoming-empty rounded-sm shadow-2xl px-10 py-20 text-center fade-up-3">
+            <!-- Decorative ring -->
+            <div class="flex justify-center mb-8">
+                <div class="w-20 h-20 rounded-full border-2 border-turquoise/30 flex items-center justify-center">
+                    <div class="w-12 h-12 rounded-full border-2 border-turquoise/50 flex items-center justify-center">
+                        <span class="text-2xl">📅</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-white font-bold text-lg uppercase tracking-widest mb-3">No Upcoming Events Yet</h3>
+
+            <p class="font-serif italic text-white/50 text-base max-w-lg mx-auto leading-relaxed" style="font-family:'Cormorant Garamond',serif;">
+                We currently have no upcoming events scheduled. As soon as one is confirmed, an announcement will be posted here — so check back soon!
+            </p>
+
+            <div class="flex justify-center items-center gap-3 mt-8">
+                <div class="h-px w-12 bg-turquoise/30"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-turquoise/50"></div>
+                <div class="h-px w-12 bg-turquoise/30"></div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Lightbox -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <button onclick="closeLightbox()" class="absolute top-6 right-8 text-white/60 hover:text-white text-3xl font-light z-10">✕</button>
+        <img id="lightbox-img" src="" alt="Event photo">
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white text-navy pt-20 pb-10 px-6 md:px-12 border-t border-nude">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-3 gap-12 mb-16">
+                <div class="md:col-span-1">
+                    <img src="images/TRIGEM_logo.png" alt="TRIGEM Institute of Excellence" class="h-24 mb-4">
+                    <p class="text-xs leading-relaxed opacity-70">Providing world-class tutoring and academic leadership for the next generation of pioneers.</p>
+                </div>
+                <div>
+                    <h5 class="font-bold text-xs uppercase tracking-[0.2em] mb-6 text-turquoise">Contact Us</h5>
+                    <ul class="text-xs space-y-3 font-medium opacity-80">
+                        <li>General: 067 326 2645</li>
+                        <li>Email: trigeminstitute@gmail.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold text-xs uppercase tracking-[0.2em] mb-6 text-turquoise">Quick Links</h5>
+                    <ul class="text-xs space-y-3 font-medium opacity-80 underline underline-offset-4 decoration-nude">
+                        <li><a href="#" class="hover:text-turquoise">Online Registration</a></li>
+                        <li><a href="#" class="hover:text-turquoise">Subject Catalog</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-nude pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] font-bold uppercase tracking-[0.1em] opacity-40">
+                <p>© 2026 TRIGEM Institute of Excellence</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="trigem-bot" class="fixed bottom-8 right-8 z-[100] cursor-pointer">
+        <div class="bg-navy p-5 rounded-full shadow-2xl hover:scale-110 transition duration-300 border-2 border-nude">
+            <span class="text-2xl">⚡</span>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('trigem-bot').addEventListener('click', () => {
+            alert("How can TRIGEM help you lead today?");
+        });
+
+        function openLightbox(src) {
+            const lb = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            lb.classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+</body>
+</html>
